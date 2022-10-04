@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit calculator | YaroshBank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="./script.js"></script>
+</head>
+
+<body>
+    <header></header>
+    <main>
+        <div id="app" class="container h-100 min-vh-100">
+            <div class="row flex-nowrap h-100 min-vh-100">
+                <div class="col-7 col-sm-8 pt-3">
+                    <div class="row mb-2">
+                        <div>
+                            <label for="bank" class="form-label fs-5">Название банка</label>
+                            <input v-model="form.bankName" name="bank" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-4 mb-2 mb-lg-0">
+                                <label for="amountCurrency" class="form-label fs-5" title="Сумма депозита">Сумма, $</label>
+                                <input v-model="form.amountCurrency" name="amountCurrency" type="number"
+                                    class="form-control input-small" min="0" :max="limitCurrency">
+                                <small v-if="limitCurrency" class="text-muted">Макс. ${{ limitCurrency }}</small>
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-4 mb-2 mb-sm-0">
+                                <label for="cashRate" class="form-label fs-5"
+                                    title="Курс, по которому продаем наличный доллар">Наличный курс</label>
+                                <input v-model="form.cashRate" name="cashRate" type="number"
+                                    class="form-control input-small">
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <label for="cardRate" class="form-label fs-5"
+                                    title="Курс, по которому покупаем доллар">Карточный курс</label>
+                                <input v-model="form.cardRate" name="cardRate" type="number"
+                                    class="form-control input-small">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="fs-5 col-12 col-sm-6 col-lg-3 mb-2 mb-lg-0">
+                            <h5>Нужно продать, $</h5>
+                            <span>{{ cashAmount }}</span>
+                        </div>
+                        <div class="fs-5 col-12 col-sm-6 col-lg-3 mb-2 mb-lg-0">
+                            <h5>Доход, $</h5>
+                            <strong class="text-danger">{{ profit }}</strong>
+                        </div>
+                        <div class="fs-5 col-12 col-sm-6 col-lg-3 mb-2 mb-sm-0">
+                            <h5>Доход, %</h5>
+                            <span>{{ profitPercent }}</span>
+                        </div>
+                        <div class="fs-5 col-12 col-sm-6 col-lg-3">
+                            <h5>Годовых, %</h5>
+                            <span>{{ annualProfitPercent }}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button class="btn btn-primary" @click="saveBank">Сохранить</button>
+                            <button v-if="doShowResetButton" class="btn btn-warning ms-2" @click="reset">Сбросить</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-5 col-sm-4 d-flex flex-column flex-shrink-0 p-3 text-bg-dark">
+                    <div href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <h3>Банки</h3>
+                    </div>
+                    <hr>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li v-for="bank in savedBanks" class="nav-item">
+                            <a 
+                                href="#" 
+                                class="nav-link text-white"
+                                :class="{active: bank.bankName === form.bankName}"
+                                @click="selectBank(bank)"
+                            >
+                            <span class="fs-5 fw-bold">{{ bank.bankName }}</span>
+                            <small class="fs-6 ms-2">{{ bank.cardRate }}</small>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer></footer>
+</body>
+
+</html>
