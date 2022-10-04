@@ -50,6 +50,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 return false
             },
+            totalProfit() {
+                let totalProfit = 0
+
+                for (let key in this.savedBanks) {
+                    totalProfit += +this.getBankProfit(this.savedBanks[key])
+                }
+
+                return totalProfit
+            },
         },
         mounted() {
             this.refreshSavedBanksList()
@@ -80,6 +89,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 delete this.savedBanks[this.form.bankName]
 
                 localStorage.setItem('banks', JSON.stringify(this.savedBanks))
+            },
+            getBankProfit(bank) {
+                let profit = bank.amountCurrency - bank.amountCurrency * bank.cardRate / bank.cashRate
+                return profit.toFixed(2)
             },
         },
     }).mount('#app')
