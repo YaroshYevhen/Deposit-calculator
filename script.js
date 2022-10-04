@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
                 return false
-            }
+            },
         },
         mounted() {
             this.refreshSavedBanksList()
@@ -75,6 +75,11 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             reset() {
                 this.form = Object.assign({}, this.selectedBank)
+            },
+            deleteBank() {
+                delete this.savedBanks[this.form.bankName]
+
+                localStorage.setItem('banks', JSON.stringify(this.savedBanks))
             },
         },
     }).mount('#app')
